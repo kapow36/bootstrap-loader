@@ -2,7 +2,7 @@
 {
     $.fn.bootstrapLoader = function (action)
     {
-        var loaderOptionDefaults = { loadingdelay: 250 }
+        var loaderOptionDefaults = { loadingdelay: 250, width: "200px" }
 
         if (!action || typeof action === "object")
         {
@@ -23,13 +23,17 @@
                 // Set options using the data attributes and the options passed in and the defaults
                 var options = $.extend({}, loaderOptionDefaults, _this.data(), action);
                 _this.data("loadingdelay", options.loadingdelay);
+                _this.data("width", options.width);
 
                 // GENERATE HTML
                 if (_this.parent().hasClass("loader-content") == false)
                 {
-                    _this.wrap("<div class='loader-container' style='display:none;'><div class='loader-content'></div></div>");
-                    _this.append("<div class='bootstrap-loader-animation'></div>");
-                    _this.after("<p>Loading...</p>");
+                    _this.wrap("<div class='loader-container' style='display:none;'><div class='loader-center'><div class='loader-content' style='width: " + _this.data("width") + "'></div></div></div>");
+
+                    if (_this.children().length <= 0)
+                    {
+                        _this.append("<div class='bootstrap-loader-animation'></div><p>Loading...</p>");
+                    }
                 }
             });
         }
@@ -63,4 +67,19 @@
 $(document).ready(function ()
 {
     $(".bootstrap-loader").bootstrapLoader();
+
+    $(document).ajaxSend((event, jqxhr, settings) =>
+    {
+        if (settings.useGlobalLoader !== false)
+        {
+            $(".bootstrap-loader").bootstrapLoader("show");
+        }
+    });
+    $(document).ajaxComplete((event, jqxhr, settings) =>
+    {
+        if (settings.useGlobalLoader !== false)
+        {
+            $(".bootstrap-loader").bootstrapLoader("hide");
+        }
+    });
 });
