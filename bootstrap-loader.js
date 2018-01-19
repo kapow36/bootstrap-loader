@@ -68,14 +68,14 @@ $(document).ready(function ()
 {
     $(".bootstrap-loader").bootstrapLoader();
 
-    $(document).ajaxSend((event, jqxhr, settings) =>
+    $(document).ajaxSend(function(event, jqxhr, settings)
     {
         if (settings.useGlobalLoader !== false)
         {
             $(".bootstrap-loader").bootstrapLoader("show");
         }
     });
-    $(document).ajaxComplete((event, jqxhr, settings) =>
+    $(document).ajaxComplete(function(event, jqxhr, settings)
     {
         if (settings.useGlobalLoader !== false)
         {
